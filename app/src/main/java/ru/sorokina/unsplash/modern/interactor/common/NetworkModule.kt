@@ -1,23 +1,26 @@
 package ru.sorokina.unsplash.modern.interactor.common
 
-import android.util.Log
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import ru.sorokina.unsplash.modern.interactor.common.interceptors.ServiceInterceptor
+import ru.sorokina.unsplash.modern.utils.Logger
 import java.util.concurrent.TimeUnit
-
-private const val NETWORK_LOG_TAG = "NETWORK_LOG_TAG" //TODO add logger
 
 class NetworkModule {
 
+    private val json = Json { ignoreUnknownKeys = true }
+
     fun provideRetrofit(): Retrofit {
+        val contentType = "application/json".toMediaType()
+
         return Retrofit.Builder()
             .client(provideHttpClient()) //TODO add DI
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addConverterFactory(json.asConverterFactory(contentType))
             .build()
     }
 
@@ -32,7 +35,7 @@ class NetworkModule {
     }
 
     private fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        val logging = HttpLoggingInterceptor { message -> Log.d(NETWORK_LOG_TAG, message) }
+        val logging = HttpLoggingInterceptor { message -> Logger.d(message) }
         logging.level = HttpLoggingInterceptor.Level.BODY
         return logging
     }
