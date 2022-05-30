@@ -13,7 +13,7 @@ class PhotosRepository(
 ) {
     suspend fun getPhotos(): Flow<List<Photo>> {
         return flow {
-            val photos = photosApi.getPhotos().map {
+            val photos = photosApi.getPhotos(pageSize = 100).map {
                 it.transform()
             }
             emit(photos)
