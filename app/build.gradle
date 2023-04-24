@@ -83,7 +83,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose'
 
     implementation "io.coil-kt:coil-compose:2.2.2"
-    implementation 'com.github.orlando-dev-code:compose-image-blurhash:2.1.0'
+    implementation 'com.github.orlando-dev-code:compose-image-blurhash:3.0.2'
 
     implementation "androidx.paging:paging-compose:1.0.0-alpha18"
 

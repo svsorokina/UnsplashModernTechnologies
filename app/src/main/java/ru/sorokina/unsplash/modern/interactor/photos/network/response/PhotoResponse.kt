@@ -10,6 +10,12 @@ import ru.sorokina.unsplash.modern.interactor.common.Transformable
 data class PhotoObj(
     @SerialName("id")
     val id: String?,
+    @SerialName("blur_hash")
+    val blurHash: String?,
+    @SerialName("width")
+    val width: Int?,
+    @SerialName("height")
+    val height: Int?,
     @SerialName("urls")
     val urls: UrlsObj?
 ) : Transformable<Photo> {
@@ -17,6 +23,9 @@ data class PhotoObj(
     override fun transform(): Photo {
         return Photo(
             id = id.orEmpty(),
+            blurHash = blurHash.orEmpty(),
+            width = width ?: 0,
+            height = height ?: 0,
             urls = urls?.transform() ?: Urls()
         )
     }

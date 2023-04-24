@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,7 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.AsyncImage
+import coil.annotation.ExperimentalCoilApi
+import com.ondev.imageblurkt_lib.AsyncImageBlurHash
+import com.ondev.imageblurkt_lib.ImageBlurHashModel
+import ru.sorokina.unsplash.modern.R
 import ru.sorokina.unsplash.modern.domain.Photo
 
 @Composable
@@ -70,7 +74,8 @@ fun PhotosList(
                     verticalItemSpacing = 8.dp,
                 ) {
                     items(
-                        lazyPhotoItems.itemCount
+                        count = lazyPhotoItems.itemCount,
+                        key =  { index -> index }
                     ) { index ->
                         val modifier = when (index) {
                             0 -> Modifier.clip(RoundedCornerShape(topStart = 16.dp))
@@ -78,8 +83,7 @@ fun PhotosList(
                             else -> Modifier
                         }
 
-                        val url = lazyPhotoItems[index]?.urls?.regular.orEmpty()
-                        ImageLoader(url, modifier)
+                        ImageLoader(lazyPhotoItems[index], modifier)
                     }
 
                     lazyPhotoItems.apply {
@@ -113,16 +117,26 @@ fun PhotosList(
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ImageLoader(
-    url: String,
+    photo: Photo?,
     modifier: Modifier = Modifier
 ) {
-    AsyncImage(
-        modifier = modifier
-            .fillMaxWidth(),
-        model = url,
-        contentDescription = "",
+    val model = ImageBlurHashModel(
+        data = photo?.urls?.regular.orEmpty(),
+        blurHash = photo?.blurHash.orEmpty()
+    )
+
+    val aspectRatio = photo?.height?.let {
+        photo.width.toFloat() / photo.height.toFloat()
+    }
+    AsyncImageBlurHash(
+        modifier = aspectRatio?.let {
+            modifier.aspectRatio(it)
+        } ?: modifier.fillMaxWidth(),
+        model = model,
+        notImageFoundRes = R.drawable.ic_image_not_found,
         contentScale = ContentScale.Fit
     )
 }

@@ -4,6 +4,9 @@ import ru.sorokina.unsplash.modern.utils.Constants.EMPTY_STRING
 
 data class Photo(
     val id: String = EMPTY_STRING,
+    val blurHash: String,
+    val width: Int,
+    val height: Int,
     val urls: Urls = Urls(),
 )
 
