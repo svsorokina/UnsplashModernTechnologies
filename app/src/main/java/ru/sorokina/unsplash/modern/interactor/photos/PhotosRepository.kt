@@ -1,22 +1,18 @@
 package ru.sorokina.unsplash.modern.interactor.photos
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import ru.sorokina.unsplash.modern.domain.Photo
 import ru.sorokina.unsplash.modern.interactor.common.NetworkModule
 import ru.sorokina.unsplash.modern.interactor.photos.network.PhotosApi
 
+const val PER_PAGE_COUNT = 30
+const val DEFAULT_PAGE = 1
+
 class PhotosRepository(
     private val photosApi: PhotosApi = PhotosModule(NetworkModule().provideRetrofit()).providePhotosService()
 ) {
-    suspend fun getPhotos(): Flow<List<Photo>> {
-        return flow {
-            val photos = photosApi.getPhotos(pageSize = 100).map {
-                it.transform()
-            }
-            emit(photos)
-        }.flowOn(Dispatchers.IO)
+    suspend fun getPhotos(page: Int): List<Photo> {
+        return photosApi.getPhotos(page = page, pageSize = PER_PAGE_COUNT).map {
+            it.transform()
+        }
     }
 }

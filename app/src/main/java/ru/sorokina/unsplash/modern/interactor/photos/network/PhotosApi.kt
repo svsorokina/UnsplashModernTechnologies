@@ -9,6 +9,7 @@ interface PhotosApi {
 
     @GET(PHOTOS_URL)
     suspend fun getPhotos(
+        @Query("page") page: Int,
         @Query("per_page") pageSize: Int
     ): List<PhotoObj>
 }

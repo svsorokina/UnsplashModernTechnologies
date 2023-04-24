@@ -1,33 +1,23 @@
 package ru.sorokina.unsplash.modern.ui.photos
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
 import ru.sorokina.unsplash.modern.App
-import ru.sorokina.unsplash.modern.interactor.common.Result
-import ru.sorokina.unsplash.modern.ui.photos.data.PhotosUi
-import ru.sorokina.unsplash.modern.utils.Logger
+import ru.sorokina.unsplash.modern.domain.Photo
+import ru.sorokina.unsplash.modern.interactor.photos.PER_PAGE_COUNT
+import ru.sorokina.unsplash.modern.interactor.photos.PhotosSource
 
 class PhotosViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PhotosUi(Result.Loading))
-    val uiState: StateFlow<PhotosUi> = _uiState.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = PhotosUi(Result.Loading)
-    )
-
-    init {
-        loadPhotos()
-    }
-
-    private fun loadPhotos() {
-        viewModelScope.launch {
-            App.photosInteractor.getPhotos().collect {
-                _uiState.value = PhotosUi(it)
+    fun getPhotos(): Flow<PagingData<Photo>> {
+        return Pager(
+            config = PagingConfig(enablePlaceholders = false, pageSize = PER_PAGE_COUNT),
+            pagingSourceFactory = {
+                PhotosSource(App.photosInteractor)
             }
-        }
+        ).flow
     }
 }
