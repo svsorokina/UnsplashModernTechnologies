@@ -1,6 +1,7 @@
 package ru.sorokina.unsplash.modern.ui.photos
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -24,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -33,8 +37,11 @@ import com.ondev.imageblurkt_lib.AsyncImageBlurHash
 import com.ondev.imageblurkt_lib.ImageBlurHashModel
 import ru.sorokina.unsplash.modern.R
 import ru.sorokina.unsplash.modern.domain.Photo
+import ru.sorokina.unsplash.modern.ui.shimmerEffect
+import kotlin.random.Random
 
 @Composable
+@Preview
 fun PhotosScreen(
     viewModel: PhotosViewModel = PhotosViewModel(),
 ) {
@@ -50,9 +57,7 @@ fun PhotosList(
     Box(modifier = Modifier.fillMaxSize()) {
         when (lazyPhotoItems.loadState.refresh) {
             is LoadState.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                LoadingView()
             }
 
             is LoadState.Error -> {
@@ -75,7 +80,7 @@ fun PhotosList(
                 ) {
                     items(
                         count = lazyPhotoItems.itemCount,
-                        key =  { index -> index }
+                        key = { index -> index }
                     ) { index ->
                         val modifier = when (index) {
                             0 -> Modifier.clip(RoundedCornerShape(topStart = 16.dp))
@@ -161,6 +166,36 @@ fun ErrorItem(
         )
         OutlinedButton(onClick = onClickRetry) {
             Text(text = "Try again")
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun LoadingView() {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        contentPadding = PaddingValues(24.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalItemSpacing = 8.dp,
+    ) {
+        items(count = 12) { index: Int ->
+            val modifier = when (index) {
+                0 -> Modifier.clip(RoundedCornerShape(topStart = 16.dp))
+                1 -> Modifier.clip(RoundedCornerShape(topEnd = 16.dp))
+                else -> Modifier
+            }
+
+            val height = Random.nextInt(96, 224)
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(height.dp)
+                    .background(
+                        colorResource(id = R.color.gray)
+                    )
+                    .shimmerEffect()
+            )
         }
     }
 }
