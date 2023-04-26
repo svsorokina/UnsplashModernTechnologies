@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">UnsplashModernTechnologies</string>
+    <string name="load_error">Что-то пошло не так</string>
+    <string name="retry">Повторить</string>
 </resources>

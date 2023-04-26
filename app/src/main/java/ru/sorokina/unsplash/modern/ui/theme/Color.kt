@@ -1,8 +1,7 @@
-package ru.sorokina.unsplash.myapplication.ui.theme
+package ru.sorokina.unsplash.modern.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val VeganMasterMind = Color(0xFF30C150)
+val HelloSpring = Color(0xFF42DB63)
+val Mithril = Color(0xFF878787)

@@ -1,28 +1,17 @@
-package ru.sorokina.unsplash.myapplication.ui.theme
+package ru.sorokina.unsplash.modern.ui.theme
 
 import androidx.compose.material.Typography
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import ru.sorokina.unsplash.modern.R
 
-// Set of Material typography styles to start with
+private val regular = Font(R.font.amiko_regular, FontWeight.W400)
+private val medium = Font(R.font.amiko_semi_bold, FontWeight.W500)
+private val bold = Font(R.font.amiko_bold, FontWeight.W700)
+
+val fontFamily = FontFamily(fonts = listOf(regular, medium, bold))
+
 val Typography = Typography(
-    body1 = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
-    ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
+    defaultFontFamily = fontFamily
 )
