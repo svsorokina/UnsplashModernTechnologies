@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.paging.compose.collectAsLazyPagingItems
-import ru.sorokina.unsplash.modern.ui.photos.PhotoDetailScreen
+import ru.sorokina.unsplash.modern.ui.photo_detail.PhotoDetailScreen
 import ru.sorokina.unsplash.modern.ui.photos.PhotosScreen
 import ru.sorokina.unsplash.modern.ui.photos.PhotosViewModel
 

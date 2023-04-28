@@ -2,4 +2,7 @@
     <string name="app_name">UnsplashModernTechnologies</string>
     <string name="load_error">Что-то пошло не так</string>
     <string name="retry">Повторить</string>
+
+    <string name="about_photo_btn_text">О фото</string>
+    <string name="share_btn_text">Поделиться</string>
 </resources>
