@@ -6,7 +6,6 @@ import androidx.navigation.navArgument
 interface Destination {
     val route: String
 }
-
 object PhotosList : Destination {
     override val route = "photos_list"
 }
