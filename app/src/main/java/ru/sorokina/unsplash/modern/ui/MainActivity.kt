@@ -5,13 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.sorokina.unsplash.modern.ui.photos.PhotosScreen
-import ru.sorokina.unsplash.modern.ui.theme.MyApplicationTheme
+import ru.sorokina.unsplash.modern.navigation.AppNavHost
+import ru.sorokina.unsplash.modern.ui.photos.PhotosViewModel
+import ru.sorokina.unsplash.modern.ui.theme.UnsplashTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -23,13 +28,16 @@ class MainActivity : ComponentActivity() {
             SideEffect {
                 systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = useDarkIcons)
             }
-            MyApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    PhotosScreen()
-                }
+
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+
+            val navController = rememberNavController()
+
+            UnsplashTheme {
+                AppNavHost(
+                    navController = navController,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }

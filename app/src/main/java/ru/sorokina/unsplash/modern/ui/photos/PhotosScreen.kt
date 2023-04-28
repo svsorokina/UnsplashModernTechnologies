@@ -1,12 +1,13 @@
 package ru.sorokina.unsplash.modern.ui.photos
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -15,38 +16,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import coil.annotation.ExperimentalCoilApi
-import com.ondev.imageblurkt_lib.AsyncImageBlurHash
-import com.ondev.imageblurkt_lib.ImageBlurHashModel
 import ru.sorokina.unsplash.modern.R
 import ru.sorokina.unsplash.modern.domain.Photo
 import ru.sorokina.unsplash.modern.ui.common.ErrorView
 import ru.sorokina.unsplash.modern.ui.common.LoadingView
 import ru.sorokina.unsplash.modern.ui.common.PagingItemErrorView
 import ru.sorokina.unsplash.modern.ui.common.PagingLoadingItem
+import ru.sorokina.unsplash.modern.ui.common.image_loader.ImageLoader
 
 @Composable
-@Preview
 fun PhotosScreen(
-    viewModel: PhotosViewModel = PhotosViewModel(),
+    photos: LazyPagingItems<Photo>,
+    onPhotoClick: (String) -> Unit = {},
 ) {
-    val lazyPhotoItems: LazyPagingItems<Photo> = viewModel.getPhotos().collectAsLazyPagingItems()
-    PhotosList(lazyPhotoItems)
+    PhotosList(photos, onPhotoClick)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PhotosList(
     lazyPhotoItems: LazyPagingItems<Photo>,
+    onPhotoClick: (String) -> Unit = {},
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+    ) {
         when (lazyPhotoItems.loadState.refresh) {
             is LoadState.Loading -> {
                 LoadingView()
@@ -79,8 +79,11 @@ fun PhotosList(
                             1 -> Modifier.clip(RoundedCornerShape(topEnd = 16.dp))
                             else -> Modifier
                         }
-
-                        ImageLoader(lazyPhotoItems[index], modifier)
+                        ItemPhoto(
+                            modifier = modifier,
+                            photo = lazyPhotoItems[index],
+                            onPhotoClick = onPhotoClick
+                        )
                     }
 
                     lazyPhotoItems.apply {
@@ -115,26 +118,20 @@ fun PhotosList(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun ImageLoader(
+fun ItemPhoto(
+    modifier: Modifier = Modifier,
     photo: Photo?,
-    modifier: Modifier = Modifier
+    onPhotoClick: (String) -> Unit = {},
 ) {
-    val model = ImageBlurHashModel(
-        data = photo?.urls?.regular.orEmpty(),
-        blurHash = photo?.blurHash.orEmpty()
-    )
+    photo?.let {
+        val aspectRatio = photo.width.toFloat() / photo.height.toFloat()
 
-    val aspectRatio = photo?.height?.let {
-        photo.width.toFloat() / photo.height.toFloat()
+        ImageLoader(
+            modifier = modifier
+                .aspectRatio(aspectRatio)
+                .clickable { onPhotoClick(photo.id) },
+            photo = photo
+        )
     }
-    AsyncImageBlurHash(
-        modifier = aspectRatio?.let {
-            modifier.aspectRatio(it)
-        } ?: modifier.fillMaxWidth(),
-        model = model,
-        notImageFoundRes = R.drawable.ic_image_not_found,
-        contentScale = ContentScale.Fit
-    )
 }
