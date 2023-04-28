@@ -1,10 +1,19 @@
 package ru.sorokina.unsplash.modern.interactor.photos
 
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import ru.sorokina.unsplash.modern.interactor.photos.network.PhotosApi
+import javax.inject.Singleton
 
-class PhotosModule(private val retrofit: Retrofit) {
+@Module
+@InstallIn(SingletonComponent::class)
+class PhotosModule {
 
-    fun providePhotosService(): PhotosApi =
+    @Singleton
+    @Provides
+    fun providePhotosService(retrofit: Retrofit): PhotosApi =
         retrofit.create(PhotosApi::class.java)
 }

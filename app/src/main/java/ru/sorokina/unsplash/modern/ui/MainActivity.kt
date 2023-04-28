@@ -11,10 +11,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.sorokina.unsplash.modern.R
 import ru.sorokina.unsplash.modern.navigation.AppNavHost
 import ru.sorokina.unsplash.modern.ui.theme.UnsplashTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

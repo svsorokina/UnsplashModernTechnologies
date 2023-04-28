@@ -1,9 +1,10 @@
 package ru.sorokina.unsplash.modern
 
 import android.app.Application
-import ru.sorokina.unsplash.modern.interactor.photos.PhotosInteractor
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
@@ -17,11 +18,5 @@ class App : Application() {
         } else {
             //log to remote logger
         }
-    }
-
-    companion object {
-        //TODO add DI
-
-        val photosInteractor = PhotosInteractor()
     }
 }

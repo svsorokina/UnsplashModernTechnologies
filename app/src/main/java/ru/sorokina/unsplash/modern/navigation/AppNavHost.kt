@@ -2,7 +2,7 @@ package ru.sorokina.unsplash.modern.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +18,7 @@ fun AppNavHost(
 ) {
     // https://issuetracker.google.com/issues/177245496
     // https://stackoverflow.com/questions/66744977/save-and-retain-lazycolumn-scroll-position-while-using-paging-3
-    val viewModel: PhotosViewModel = viewModel(factory = PhotosViewModel.Factory)
+    val viewModel: PhotosViewModel = hiltViewModel()
     val photos = viewModel.getPhotos().collectAsLazyPagingItems()
 
     NavHost(
